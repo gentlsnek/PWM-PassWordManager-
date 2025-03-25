@@ -1,25 +1,52 @@
-document.getElementById("generate").addEventListener("click", async () => {
-    let website = document.getElementById("website").value;
-    let username = document.getElementById("username").value;
-    let length = parseInt(document.getElementById("length").value);
-    let masterPassword = prompt("Enter Master Password to Encrypt:"); // Ask for master password
+document.addEventListener("DOMContentLoaded", async function () {
+    let setupMasterPassword = document.getElementById("setupMasterPassword");
+    let passwordManager = document.getElementById("passwordManager");
 
-    if (!website || !username || !length || !masterPassword) {
-        alert("Please fill in all fields and enter a Master Password!");
+    if (!setupMasterPassword || !passwordManager) {
+        console.error("UI elements not found. Check popup.html for missing IDs.");
         return;
     }
 
-    // Generate a password
-    let password = generatePassword(length);
-    document.getElementById("password").value = password;
+    let masterPassword = await getMasterPassword();
 
-    // Store it automatically
-    await savePassword(website, username, password, masterPassword);
-    alert("Password generated and stored securely!");
+    if (masterPassword) {
+        // Show only the Master Password Setup UI
+        setupMasterPassword.style.display = "block";
+    } else {
+        // Show the full Password Manager UI
+        passwordManager.style.display = "block";
+    }
 });
 
+// Function to get the stored Master Password
+async function getMasterPassword() {
+    let data = await browser.storage.local.get("masterPassword");
+    return data.masterPassword || null;
+}
 
-document.getElementById("generate").addEventListener("click", function() {
+// Function to set a new Master Password
+async function setMasterPassword(password) {
+    await browser.storage.local.set({ masterPassword: password });
+}
+
+// Handle setting Master Password
+document.getElementById("setMasterPassword").addEventListener("click", async function () {
+    let newPassword = document.getElementById("newMasterPassword").value;
+
+    if (!newPassword) {
+        alert("Please enter a Master Password!");
+        return;
+    }
+
+    await setMasterPassword(newPassword);
+    alert("Master Password set successfully!");
+
+    // Reload the popup to show the full password manager UI
+    location.reload();
+});
+
+// Generate Password Button
+document.getElementById("generate").addEventListener("click", function () {
     let length = document.getElementById("length").value;
     length = length ? parseInt(length) : 12; // Default length is 12 if empty
 
@@ -31,9 +58,11 @@ document.getElementById("generate").addEventListener("click", function() {
     document.getElementById("password").style.display = "block";
     document.getElementById("copy").style.display = "block";
     document.getElementById("reset").style.display = "block";
+    document.getElementById("savePassword").style.display = "block";
 });
 
-document.getElementById("copy").addEventListener("click", function() {
+// Copy Password to Clipboard
+document.getElementById("copy").addEventListener("click", function () {
     let passwordField = document.getElementById("password");
     if (passwordField.value) {
         navigator.clipboard.writeText(passwordField.value)
@@ -42,7 +71,8 @@ document.getElementById("copy").addEventListener("click", function() {
     }
 });
 
-document.getElementById("reset").addEventListener("click", function() {
+// Reset Button
+document.getElementById("reset").addEventListener("click", function () {
     // Clear password field
     document.getElementById("website").value = "";
     document.getElementById("username").value = "";
@@ -56,13 +86,12 @@ document.getElementById("reset").addEventListener("click", function() {
     document.getElementById("password").style.display = "none";
 });
 
-
+// Generate Secure Password
 function generatePassword(length) {
     const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const lowercase = "abcdefghijklmnopqrstuvwxyz";
     const numbers = "0123456789";
     const symbols = "!@#$%^&*()_+-=[]{}|;:',.<>?/";
-    
 
     let password = [
         uppercase[Math.floor(Math.random() * uppercase.length)],
@@ -76,17 +105,15 @@ function generatePassword(length) {
         password.push(allChars[Math.floor(Math.random() * allChars.length)]);
     }
 
-    password = password.sort(() => Math.random() - 0.5);
-
-    return password.join("");
+    return password.sort(() => Math.random() - 0.5).join("");
 }
 
-
+// Save Password Button
 document.getElementById("savePassword").addEventListener("click", async () => {
     let website = document.getElementById("website").value;
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
-    let masterPassword = document.getElementById("masterPassword").value;
+    let masterPassword = await getMasterPassword(); // Auto-fetch stored master password
 
     if (!website || !username || !password || !masterPassword) {
         alert("Please fill in all fields!");
@@ -99,9 +126,9 @@ document.getElementById("savePassword").addEventListener("click", async () => {
 
 // Retrieve and display passwords
 document.getElementById("getPasswords").addEventListener("click", async () => {
-    let masterPassword = document.getElementById("masterPassword").value;
+    let masterPassword = await getMasterPassword(); // Auto-fetch stored master password
     if (!masterPassword) {
-        alert("Please enter your master password!");
+        alert("Master Password not set!");
         return;
     }
 
@@ -115,4 +142,3 @@ document.getElementById("getPasswords").addEventListener("click", async () => {
         list.appendChild(li);
     });
 });
-
