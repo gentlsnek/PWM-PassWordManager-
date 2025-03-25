@@ -3,56 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Manager</title>
+    <title>pwm</title>
     <style>
-        h2 {
-            color: white;
-        }
+      
+body {
+    background-color: rgb(41, 41, 41);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 260px;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 0 auto;
+}
 
-        body {
-            background-color: rgb(41, 41, 41);
-            font-family: Arial, sans-serif;
-            text-align: center;
-            width: 250px;
-            padding: 10px;
-        }
+h2 {
+    color: white;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
 
-        button {
-            align-items: center;
-            margin-top: 10px;
-            padding: 5px;
-            background-color: #0074f8;
-            color: rgb(255, 255, 255);
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
 
-        input {
-            width: 100%;
-            margin-top: 10px;
-            padding: 5px;
-            text-align: center;
-            font-size: 16px;
-        }
+input {
+    width: calc(100% - 16px);
+    margin: 8px 0;
+    padding: 8px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    transition: border-color 0.2s ease-in-out;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-        #copy, #reset {
-            display: none;
-        }
+input:focus {
+    outline: none;
+    border-color: #0074f8;
+    background-color: #ffffff;
+}
+
+
+#password-container {
+    margin-top: 12px;
+}
+
+#password {
+    display: none;
+    font-weight: bold;
+    background-color: #e8e8e8;
+}
+
+
+button {
+    width: 100%;
+    padding: 8px;
+    background-color: #0074f8;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+    display: block;
+    margin: 10px auto;
+}
+
+button:hover {
+    background-color: #005cc8;
+}
+
+button:active {
+    background-color: #004ba0;
+}
+
+
+#copy, #reset {
+    display: none;
+}
+
     </style>
 </head>
 <body>
-    <h2>Password Manager</h2>
+    <h2>PWM</h2>
     <input type="text" id="website" placeholder="Website">
     <input type="text" id="username" placeholder="Username">
     <input type="number" id="length" placeholder="Length of Password" min="6" max="64">
     <button id="generate">Generate Password</button>
     <input type="text" id="password" readonly>
+    <button id="getPasswords">Retrieve Passwords</button>
+    <ul id="passwordList"></ul>
 
     <button id="copy">Copy to Clipboard</button>
     <button id="reset">Reset</button>
 
     <script src="popup.js"></script>
+    <script src="database.js"></script>
 </body>
 </html>
 
