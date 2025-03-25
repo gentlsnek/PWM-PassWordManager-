@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager</title>
+    <style>
+        h2 {
+            color: white;
+        }
+
+        body {
+            background-color: rgb(41, 41, 41);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            width: 250px;
+            padding: 10px;
+        }
+
+        button {
+            align-items: center;
+            margin-top: 10px;
+            padding: 5px;
+            background-color: #0074f8;
+            color: rgb(255, 255, 255);
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+            margin-top: 10px;
+            padding: 5px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        #copy, #reset {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Password Manager</h2>
+    <input type="text" id="website" placeholder="Website">
+    <input type="text" id="username" placeholder="Username">
+    <input type="number" id="length" placeholder="Length of Password" min="6" max="64">
+    <button id="generate">Generate Password</button>
+    <input type="text" id="password" readonly>
+
+    <button id="copy">Copy to Clipboard</button>
+    <button id="reset">Reset</button>
+
+    <script src="popup.js"></script>
+</body>
+</html>
+
