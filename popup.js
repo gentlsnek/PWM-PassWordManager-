@@ -1,6 +1,16 @@
+'use strict'
+
+
+//remove anything to do with alerts they dont scale properly with the size of teh plugin window
+//fix the transition from first master passentry to then going to the main page
+//master password should only be used once and used to encrypt the password strorage file when it is exported
+//need a seperate button for settings on the top right or top left
+//should have access to import passwords, export passwords, change master password
+
+
 document.addEventListener("DOMContentLoaded", async function () {
     let setupMasterPassword = document.getElementById("setupMasterPassword");
-    let passwordManager = document.getElementById("passwordManager");
+    let passwordManager = document.getElementById("passMenue");
 
     if (!setupMasterPassword || !passwordManager) {
         console.error("UI elements not found. Check popup.html for missing IDs.");
@@ -11,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (masterPassword) {
         // Show only the Master Password Setup UI
-        setupMasterPassword.style.display = "block";
+        setupMasterPassword.style.display = "none";
     } else {
         // Show the full Password Manager UI
         passwordManager.style.display = "block";
@@ -34,7 +44,7 @@ document.getElementById("setMasterPassword").addEventListener("click", async fun
     let newPassword = document.getElementById("newMasterPassword").value;
 
     if (!newPassword) {
-        alert("Please enter a Master Password!");
+        console.log("Please enter a Master Password!");
         return;
     }
 
@@ -66,7 +76,7 @@ document.getElementById("copy").addEventListener("click", function () {
     let passwordField = document.getElementById("password");
     if (passwordField.value) {
         navigator.clipboard.writeText(passwordField.value)
-            .then(() => alert("Password copied to clipboard!"))
+            .then(() => ("Password copied to clipboard!"))  //remove fucking alerts they suck
             .catch(err => console.error("Error copying password: ", err));
     }
 });
@@ -107,38 +117,3 @@ function generatePassword(length) {
 
     return password.sort(() => Math.random() - 0.5).join("");
 }
-
-// Save Password Button
-document.getElementById("savePassword").addEventListener("click", async () => {
-    let website = document.getElementById("website").value;
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
-    let masterPassword = await getMasterPassword(); // Auto-fetch stored master password
-
-    if (!website || !username || !password || !masterPassword) {
-        alert("Please fill in all fields!");
-        return;
-    }
-
-    await savePassword(website, username, password, masterPassword);
-    alert("Password saved successfully!");
-});
-
-// Retrieve and display passwords
-document.getElementById("getPasswords").addEventListener("click", async () => {
-    let masterPassword = await getMasterPassword(); // Auto-fetch stored master password
-    if (!masterPassword) {
-        alert("Master Password not set!");
-        return;
-    }
-
-    let passwords = await getPasswords(masterPassword);
-    let list = document.getElementById("passwordList");
-    list.innerHTML = ""; // Clear old results
-
-    passwords.forEach(entry => {
-        let li = document.createElement("li");
-        li.textContent = `🌐 ${entry.website} | 👤 ${entry.username} | 🔑 ${entry.password || "Incorrect master password!"}`;
-        list.appendChild(li);
-    });
-});
