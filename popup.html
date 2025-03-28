@@ -87,17 +87,37 @@ button:active {
     display: none;
 }
 
+#alertError, #alertSuccess {
+
+    font-size: 20px;
+    display: none;
+    color: white;
+    padding: 40px;
+    margin-top: 20px;
+    border-radius: 5px;
+
+
+}
+#alertError.p, #alertSuccess.p {
+    text-align: center;
+    font-size: 20px;
+    color: white;
+    padding: 40px;
+    margin-top: 20px;
+    border-radius: 5px;
+
+}
     </style>
 </head>
 <body>
     <h2>PWM</h2>
 
-    <div id="setupMasterPassword" style="display: block">
+    <div id="setupMasterPassword" style="display: none">
         <input type="password" id="newMasterPassword" placeholder="Enter Master Password">
         <button id="setMasterPassword">Add Master Password</button>
     </div>
 
- <div id="passMenue" style="display: block">
+ <div id="passMenue" style="display: none">
     <input type="text" id="website" placeholder="Website">
     <input type="text" id="username" placeholder="Username">
     <input type="number" id="length" placeholder="Length of Password" min="6" max="64">
@@ -110,8 +130,16 @@ button:active {
     <button id="savePassword">Save Password</button>
     <button id="reset">Reset</button>
 </div>
+<div id="alertError" style="display: done">
+      <p>experienced an error</p>
+      <button id="closeError">Close</button>
+
+</div>
+<div id="alertSuccess" style="display: done">
+        <p>Success</p>
+        <button id="closeSuccess">Close</button>
+</div>
     <script src="popup.js"></script>
-    <script src="database.js"></script>
 </body>
 </html>
 
